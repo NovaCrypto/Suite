@@ -1,0 +1,68 @@
+plugins {
+    id 'com.gradle.build-scan' version '1.16'
+}
+
+def branch = findProperty('branch')
+def message = findProperty('message')
+
+task branchAll {
+    group 'Git Branching'
+    description "Branches git branch name -Pbranch=$branch"
+}
+
+task statusAll {
+    group 'Git Status'
+    description 'List Git status for all submodules'
+}
+
+task commitAll {
+    group 'Git Commit'
+    description "Commit all with message -Pmessage=$message"
+}
+
+task requireBranch {
+    doLast {
+        if (branch == null || branch.trim() == "" || branch.trim() != branch) {
+            throw new Exception('You need to specify a branch with -Pbranch=')
+        }
+    }
+}
+
+task requireMessage {
+    doLast {
+        if (message == null || message.trim() == "" || message.trim() != message) {
+            throw new Exception('You need to specify a message with -Pmessage=')
+        }
+    }
+}
+
+subprojects.forEach { project ->
+    println(project.name)
+    def newTask = tasks.create(name: "branch${project.name}", type: Exec) {
+        group 'Git Branching'
+        description "Branches git for submodule in ${it.name}, branch name -Pbranch=$branch"
+        commandLine 'git', '-C', project.name, 'checkout', '-b', branch
+        dependsOn requireBranch
+    }
+    branchAll.dependsOn(newTask)
+    def newStatusTask = tasks.create(name: "status${project.name}", type: Exec) {
+        group 'Git Status'
+        description "Git status for submodule in ${it.name}"
+        commandLine 'git', '-C', project.name, 'status'
+        ignoreExitValue true
+    }
+    statusAll.dependsOn(newStatusTask)
+    def newCommitTask = tasks.create(name: "commit${project.name}", type: Exec) {
+        group 'Git Commit'
+        description "Git commit for submodule in ${it.name} with message -Pmessage=${findProperty('message')}"
+        commandLine 'git', '-C', project.name, 'commit', '-a', "-m${findProperty('message')}"
+        ignoreExitValue true
+        dependsOn requireMessage
+    }
+    commitAll.dependsOn(newCommitTask)
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}

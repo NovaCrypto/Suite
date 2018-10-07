@@ -1,0 +1,27 @@
+[submodule "BIP39"]
+	path = BIP39
+	url = https://github.com/NovaCrypto/BIP39.git
+[submodule "BIP32"]
+	path = BIP32
+	url = https://github.com/NovaCrypto/BIP32.git
+[submodule "BIP44"]
+	path = BIP44
+	url = https://github.com/NovaCrypto/BIP44.git
+[submodule "SHA256"]
+	path = SHA256
+	url = https://github.com/NovaCrypto/SHA256.git
+[submodule "HASH160"]
+	path = HASH160
+	url = https://github.com/NovaCrypto/HASH160.git
+[submodule "BIP32Derivation"]
+	path = BIP32Derivation
+	url = https://github.com/NovaCrypto/BIP32Derivation.git
+[submodule "SecureString"]
+	path = SecureString
+	url = https://github.com/NovaCrypto/SecureString.git
+[submodule "ToRuntime"]
+	path = ToRuntime
+	url = https://github.com/NovaCrypto/ToRuntime.git
+[submodule "Base58"]
+	path = Base58
+	url = https://github.com/NovaCrypto/Base58.git
